@@ -90,3 +90,9 @@ ENV/
 
 # macOS
 .DS_Store
+
+# pyCharm
+.idea/
+
+# Data Source
+data/
