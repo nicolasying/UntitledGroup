@@ -62,3 +62,59 @@ movie_id INTEGER NOT NULL ,
 SELECT title, year, year_dis FROM Movies WHERE title = 'Dark Side';
 
 SELECT DISTINCT Language.language FROM Language
+
+CREATE TABLE Actor (
+id INTEGER PRIMARY KEY UNIQUE AUTO_INCREMENT,
+personnel_id INTEGER NOT NULL,
+movie_id INTEGER NOT NULL ,
+  FOREIGN KEY (movie_id) REFERENCES Movies(id),
+  FOREIGN KEY (personnel_id) REFERENCES Personnel(personnel_id)
+);
+
+DROP TABLE Actor;
+
+CREATE TABLE Personnel (
+personnel_id INTEGER PRIMARY KEY UNIQUE AUTO_INCREMENT,
+last_name varchar(30),
+first_name VARCHAR(30)
+);
+
+ALTER TABLE Personnel ADD UNIQUE (last_name, first_name);
+
+ALTER TABLE Actor ADD UNIQUE (personnel_id, movie_id);
+
+SELECT id, title, year_dis, year FROM Movies WHERE title = 'Becoming Jane' or id = 45707;
+
+SELECT movie_id, personnel_id FROM Actor WHERE movie_id = (SELECT id FROM Movies WHERE title = "Becoming Jane");
+
+SELECT personnel_id FROM Personnel WHERE last_name = 'Hathaway' AND first_name = 'Anne';
+
+SELECT movie_id, personnel_id FROM Actor WHERE personnel_id = 3126595;
+
+SELECT id FROM Movies WHERE title = 'Becoming Jane' AND year_dis is null AND year = '2007';
+
+START TRANSACTION;
+DELETE FROM Personnel WHERE personnel_id NOT IN (SELECT DISTINCT personnel_id personnel_id FROM Actor);
+COMMIT;
+
+# SELECT COUNT(id) FROM Movies WHERE Movies.year IN (2015, 2016);
+SELECT COUNT(id) FROM Movies WHERE Movies.country = "USA";
+
+SELECT DISTINCT country FROM Movies;
+
+SELECT COUNT( DISTINCT genre) FROM Genre;
+
+SELECT DISTINCT genre FROM Genre;
+
+SELECT genre, COUNT(DISTINCT movie_id) FROM Genre GROUP BY genre;
+
+SELECT DISTINCT mpaa_rating FROM Movies;
+
+SELECT count(id) FROM Movies WHERE imdb_rating IS NOT NULL AND year <= 2016 AND year >= 2000;
+
+START TRANSACTION;
+ROLLBACK;
+ALTER TABLE Personnel ADD COLUMN name VARCHAR(120) AS (CONCAT_WS(' ', first_name, last_name));
+ALTER TABLE Personnel ADD COLUMN ranking INT;
+
+SELECT last_name FROM Personnel WHERE name = "Pom Klementieff";

@@ -1,3 +1,12 @@
+# CSV Structure
+
+actor_score, length, Genre * 28, mpaa * 4, imdb_rating
+
+actor_score = atan(∑log10(100000/ranking))
+length in minutes
+genre index: Comedy Short Animation Drama History War Horror Sci-Fi Biography Documentary Family News Action Romance Musical Fantasy Adventure Mystery Thriller Music Crime Sport Western Adult Film-Noir Talk-Show Reality-TV Game-Show
+mpaa index: 0-13 13-17 17-20 20-150
+
 # Subject Candidates
 1. Naming an enterprise
 2. Diploma and income

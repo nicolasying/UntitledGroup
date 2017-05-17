@@ -316,13 +316,122 @@ def import_genre():
     cursor.close()
     cnx.close()
     file_l.close()
+
+
+def import_actors():
+    cnx = mysql.connector.connect(user='pywriter', database='movie_db', host='127.0.0.1', password='123456')
+    cursor = cnx.cursor()
+
+    actor_re = r"([^,\t]+), ([^,\t]+)\s+(.+)\s+\(([0-9]+)[/]?([IVX]+)?\)\s+.*$"
+    actor_title_re = r"\s+(.+)\s+\(([0-9]+)[/]?([IVX]+)?\)\s+.*$"
+    stmt_1 = "INSERT INTO Personnel(last_name, first_name) VALUES (%s, %s)"
+    stmt_1_5 = "SELECT personnel_id FROM Personnel WHERE last_name = %s AND first_name = %s"
+    stmt_2 = "INSERT INTO Actor(movie_id, personnel_id) VALUES ((SELECT id FROM Movies WHERE title = %s AND year_dis {} AND year = %s), %s);"
+    file_l = codecs.open('/Users/soshy/Code/sampleCode/data-movies/data/actresses.list', encoding='iso-8859-1', mode='r')
+    for line in file_l:
+        if line[:9] == "THE ACTRE":
+            break
+    for i in range(4):
+        line = next(file_l)
+    while True:
+    # for i in range(4):
+        try:
+            line = next(file_l)
+            res = re.match(actor_re, line)
+            if res is not None:
+                # try:
+                try:
+                    cursor.execute(stmt_1, (codecs.encode(res.groups()[0], 'utf8'), codecs.encode(res.groups()[1], 'utf8')))
+                    print "Success Actor:", codecs.encode(res.groups()[0], 'utf8'), codecs.encode(res.groups()[1], 'utf8')
+                except mysql.connector.errors.IntegrityError:
+                    pass
+                    # print "Exist:", codecs.encode(res.groups()[0], 'utf8'), codecs.encode(res.groups()[1], 'utf8')
+                except mysql.connector.errors.DataError:
+                    print "Data Error:", codecs.encode(res.groups()[0], 'utf8'), codecs.encode(res.groups()[1], 'utf8')
+                    continue
+                cursor.execute(stmt_1_5, (codecs.encode(res.groups()[0], 'utf8'), codecs.encode(res.groups()[1], 'utf8')))
+                row = cursor.fetchone()
+                actor_id = row[0]
+                # print actor_id
+                if res.groups()[4] is None:
+                    bis = "IS NULL"
+                else:
+                    bis = '= \"' + codecs.encode(res.groups()[4], 'utf8') + '\"'
+                try:
+                    # cursor.execute(stmt_2, (codecs.encode(res.groups()[2], 'utf8'), bis, codecs.encode(res.groups()[3], 'utf8'), actor_id))
+                    cursor.execute(stmt_2.format(bis), (codecs.encode(res.groups()[2], 'utf8'), codecs.encode(res.groups()[3], 'utf8'), actor_id))
+                    print "Success:", codecs.encode(res.groups()[2], 'utf8'), codecs.encode(res.groups()[3], 'utf8'), bis
+                except mysql.connector.errors.IntegrityError:
+                    # print "Exist:", codecs.encode(res.groups()[2], 'utf8'), codecs.encode(res.groups()[3], 'utf8'), bis
+                    # print res.groups()[2], res.groups()[3], res.groups()[4]
+                    pass
+                while True:
+                    line = next(file_l)
+                    res = re.match(actor_title_re, line)
+                    if line == '\n':
+                        break
+                    if res is None:
+                        continue
+                    if res.groups()[2] is None:
+                        bis = "IS NULL"
+                    else:
+                        # bis = codecs.encode(res.groups()[2], 'utf8')
+                        bis = '= \"' + codecs.encode(res.groups()[2], 'utf8') + '\"'
+                    try:
+                        cursor.execute(stmt_2.format(bis), (codecs.encode(res.groups()[0], 'utf8'), codecs.encode(res.groups()[1], 'utf8'), actor_id))
+                        # cursor.execute(stmt_2.format(codecs.encode(res.groups()[0], 'utf8'), bis, codecs.encode(res.groups()[1], 'utf8'), actor_id))
+                        print "Success:", codecs.encode(res.groups()[0], 'utf8'), codecs.encode(res.groups()[1], 'utf8'), bis
+                    except mysql.connector.errors.IntegrityError:
+                        # print "Exist:", codecs.encode(res.groups()[0], 'utf8'), codecs.encode(res.groups()[1], 'utf8'), bis
+                        # print res.groups()[0], res.groups()[1], res.groups()[2], "Actor_id", actor_id
+                        pass
+
+        except StopIteration:
+            break
+    try:
+        cnx.commit()
+    except:
+        cnx.rollback()
+        print("Something Wrong with commit")
+    cursor.close()
+    cnx.close()
+    file_l.close()
+
+
+def import_actor_ranking():
+    cnx = mysql.connector.connect(user='pyacc', database='movie_db', host='59.78.21.76', port='33068', password='001100')
+    cursor = cnx.cursor()
+    i = 0;
+    stmt_2 = "UPDATE Personnel SET ranking = %s WHERE name = %s;"
+    file_l = codecs.open('/Users/soshy/Code/sampleCode/data-movies/data/namelist_all_in_one.txt', encoding='utf-8', mode='r')
+    for line in file_l:
+        line = line.strip()
+        i += 1
+        try:
+            cursor.execute(stmt_2, (i, codecs.encode(line, 'utf8')))
+            print "Success Actor:", codecs.encode(line, 'utf8')
+        except mysql.connector.errors.IntegrityError:
+            # pass
+            print "None Exist:", codecs.encode(line, 'utf8')
+        except mysql.connector.errors.DataError:
+            print "Data Error:", codecs.encode(line, 'utf8')
+        except:
+            print "Other Error:", codecs.encode(line, 'utf8')
+    try:
+        cnx.commit()
+    except:
+        cnx.rollback()
+        print("Something Wrong with commit")
+    cursor.close()
+    cnx.close()
+    file_l.close()
 # import_movies()  # 967181 entries
 # import_length()  # 333257 entries deleted, 633924 left
 # import_budget()  # 42986 left
 # import_mpaa()
 # import_imdb()
 # import_country()
-import_language()
-
-import_genre()
-
+# import_language()
+# import_genre()
+# import_actors()
+import_actor_ranking()
