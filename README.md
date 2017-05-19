@@ -1,27 +1,23 @@
 # CSV Structure
 
+
 actor_score, length, Genre * 28, mpaa * 4, imdb_rating
 
+
 actor_score = atan(∑log10(100000/ranking))
+
 length in minutes
+
 genre index: Comedy Short Animation Drama History War Horror Sci-Fi Biography Documentary Family News Action Romance Musical Fantasy Adventure Mystery Thriller Music Crime Sport Western Adult Film-Noir Talk-Show Reality-TV Game-Show
+
 mpaa index: 0-13 13-17 17-20 20-150
 
-# Subject Candidates
-1. Naming an enterprise
-2. Diploma and income
-3. Office Box Prediction based on Movie metadata stats
-4. 对于某个校方公众号比如说校学生会，点击率影响因素的研究（如话题内容、推送的排序、标题）；
-5. 房价会不会透支创造力？研究地区房价与专利产出之间的关系；
-6. 寒门再难出贵子？研究家庭背景对于大学生人生规划（专业、学生会经历、就业意愿），基于专业的面板数据；
-7. 有一个很有意思的开放数据平台uber movement，但是目前我有点bug在于还没能成功打开数据集，还没看到有哪些属性，如果能打开应该能挖掘一些点
-8. 运动世界校园版 高峰分流
-# Ballot
-1
-2
-3
-4
-5 NRB
-6 NRB
-7 NRB
-8 YSS
+# Presentation
+- 项目设计展示的效果=15%
+- 项目设计中数据的处理、理解=20%
+- 项目设计所涉及的数据科学技术=25%
+- 项目设计的创意=10%
+- 项目设计的完成度=30%
+
+答辩内容须包括课题背景介绍、数据集描述、数据分析结论及展示、进一步的研究方向，以及代码演示等；
+

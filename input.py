@@ -120,3 +120,8 @@ for film in m_list[split*ser:split*(ser+1)]:
 # Parallel(n_jobs=multiprocessing.cpu_count())(delayed(print_one_line)(it) for it in m_list)
 # print_one_line(m_list[0])
 f_out.close()
+
+cnx = mysql.connector.connect(user='pyacc', database='movie_db', host='59.78.21.76', port='33068', password='001100')
+cursor = cnx.cursor()
+cursor.execute("SELECT budget, imdb_rating FROM Movies WHERE budget IS NOT NULL AND imdb_rating IS NOT NULL")
+res = cursor.fetchall()

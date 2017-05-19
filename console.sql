@@ -118,3 +118,5 @@ ALTER TABLE Personnel ADD COLUMN name VARCHAR(120) AS (CONCAT_WS(' ', first_name
 ALTER TABLE Personnel ADD COLUMN ranking INT;
 
 SELECT last_name FROM Personnel WHERE name = "Pom Klementieff";
+
+SELECT count(id) FROM Movies WHERE Movies.imdb_rating is not NULL;
